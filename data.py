@@ -23,6 +23,14 @@ EVENTS = [
         "summary": "Carthaginian general Hannibal leads an army, including war elephants, over the Alps to invade Italy during the Second Punic War.",
     },
     {
+        "title": "\"Carthago Delenda Est\"",
+        "year": -146,
+        "display_date": "146 BCE",
+        "category": "Rome",
+        "icon": "🏚️",
+        "summary": "Cato the Elder ends every Senate speech with \"Carthago delenda est\" - Carthage must be destroyed. Rome finally besieges and razes the city at the end of the Third Punic War.",
+    },
+    {
         "title": "Caesar's Conquest of Gaul",
         "year": -58,
         "display_date": "58-50 BCE",
@@ -45,6 +53,14 @@ EVENTS = [
         "category": "Rome",
         "icon": "👑",
         "summary": "Caesar arrives in Egypt pursuing his rival Pompey and becomes entangled with Cleopatra, backing her claim to the Egyptian throne.",
+    },
+    {
+        "title": "\"Veni, Vidi, Vici\"",
+        "year": -47,
+        "display_date": "47 BCE",
+        "category": "Rome",
+        "icon": "🏆",
+        "summary": "Caesar reports his lightning victory over King Pharnaces II at the Battle of Zela in three words: \"I came, I saw, I conquered.\"",
     },
     {
         "title": "Assassination of Julius Caesar",
@@ -79,6 +95,22 @@ EVENTS = [
         "summary": "Octavian is granted the title Augustus and becomes Rome's first emperor, beginning two centuries of relative peace and stability.",
     },
     {
+        "title": "\"Carpe Diem\" Coined",
+        "year": -23,
+        "display_date": "23 BCE",
+        "category": "Rome",
+        "icon": "⏳",
+        "summary": "The poet Horace writes \"carpe diem\" - seize the day - in his Odes, coining one of the most quoted phrases in the world.",
+    },
+    {
+        "title": "\"We Who Are About to Die Salute You\"",
+        "year": 52,
+        "display_date": "52 CE",
+        "category": "Rome",
+        "icon": "🤺",
+        "summary": "Condemned fighters reportedly greet Emperor Claudius with \"Ave Imperator, morituri te salutant\" before a staged naval battle - a phrase now inseparable from pop culture's idea of the gladiator.",
+    },
+    {
         "title": "The Colosseum Opens",
         "year": 80,
         "display_date": "80 CE",
@@ -93,6 +125,14 @@ EVENTS = [
         "category": "Rome",
         "icon": "🌋",
         "summary": "Mount Vesuvius erupts and buries Pompeii and Herculaneum in ash, preserving them - and their residents - almost perfectly for archaeologists.",
+    },
+    {
+        "title": "\"Bread and Circuses\"",
+        "year": 100,
+        "display_date": "c. 100 CE",
+        "category": "Rome",
+        "icon": "🎪",
+        "summary": "Satirist Juvenal coins \"panem et circenses\" - bread and circuses - describing how free food and games kept the Roman public docile.",
     },
     {
         "title": "Edict of Milan",
