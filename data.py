@@ -39,6 +39,14 @@ EVENTS = [
         "summary": "Julius Caesar conquers Gaul over nearly a decade of campaigning, cementing his military reputation and wealth.",
     },
     {
+        "title": "\"Divide and Conquer\"",
+        "year": -55,
+        "display_date": "58-50 BCE",
+        "category": "Rome",
+        "icon": "🧩",
+        "summary": "Caesar's Gallic Wars showcase Rome's signature strategy of exploiting rivalries among enemies to conquer them piecemeal - later distilled into the maxim \"divide et impera,\" divide and rule.",
+    },
+    {
         "title": "Caesar Crosses the Rubicon",
         "year": -49,
         "display_date": "49 BCE",
@@ -103,6 +111,14 @@ EVENTS = [
         "summary": "The poet Horace writes \"carpe diem\" - seize the day - in his Odes, coining one of the most quoted phrases in the world.",
     },
     {
+        "title": "\"All Roads Lead to Rome\"",
+        "year": -20,
+        "display_date": "20 BCE",
+        "category": "Rome",
+        "icon": "🛣️",
+        "summary": "Augustus erects the Milliarium Aureum, the Golden Milestone, in the Forum - the symbolic point from which every road in the empire was measured, and the real-world root of the proverb.",
+    },
+    {
         "title": "\"We Who Are About to Die Salute You\"",
         "year": 52,
         "display_date": "52 CE",
@@ -141,6 +157,22 @@ EVENTS = [
         "category": "Rome",
         "icon": "✝️",
         "summary": "Emperor Constantine legalizes Christianity throughout the Roman Empire, ending centuries of persecution.",
+    },
+    {
+        "title": "\"When in Rome...\"",
+        "year": 390,
+        "display_date": "c. 390 CE",
+        "category": "Rome",
+        "icon": "🤷",
+        "summary": "Augustine asks Bishop Ambrose of Milan why Rome fasts on Saturdays but Milan doesn't. Ambrose's reply is later paraphrased into \"when in Rome, do as the Romans do.\"",
+    },
+    {
+        "title": "\"Rome Wasn't Built in a Day\"",
+        "year": 1190,
+        "display_date": "c. 1190 CE",
+        "category": "Rome",
+        "icon": "🧱",
+        "summary": "The proverb first appears in a medieval French collection - \"Rome ne fu pas faite toute en un jour\" - capturing how the city, and the empire, actually grew gradually over centuries.",
     },
 
     # --- Constantinople / Istanbul ---
