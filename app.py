@@ -3,6 +3,7 @@ import bisect
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+from plotly.subplots import make_subplots
 
 from boundaries import boundary_for_event
 from data import CHAOS_PERIODS, DYNASTY_COLORS, EVENTS, LEADERS, TERRITORY
@@ -123,12 +124,24 @@ Y_PAD = 10
 SHARED_Y_RANGE = [TOTAL_DISPLAY_HEIGHT + Y_PAD, -Y_PAD]
 CHART_HEIGHT = 4300
 
-events_col, leaders_col, detail_col = st.columns([2, 2, 3], gap="small")
+chart_col, detail_col = st.columns([4, 3], gap="small")
 
-with events_col:
+with chart_col:
     df["display_y"] = df["year"].apply(display_pos)
 
-    events_fig = go.Figure(
+    # Events (left) and leaders (right) share one figure with linked y-axes,
+    # so dragging to pan through the timeline scrolls both sides together -
+    # and since the chart itself is a fixed, compact height rather than the
+    # whole page being thousands of pixels tall, the detail column never
+    # scrolls out of view.
+    combined_fig = make_subplots(
+        rows=1, cols=2,
+        shared_yaxes=True,
+        column_widths=[0.42, 0.58],
+        horizontal_spacing=0.02,
+    )
+
+    combined_fig.add_trace(
         go.Scatter(
             y=df["display_y"],
             x=[0] * len(df),
@@ -138,43 +151,28 @@ with events_col:
             hovertext=df.apply(lambda r: f"<b>{r['title']}</b><br>{r['display_date']}", axis=1),
             hoverinfo="text",
             showlegend=False,
-        )
+        ),
+        row=1, col=1,
     )
     for _, r in df.iterrows():
-        events_fig.add_annotation(
+        combined_fig.add_annotation(
             x=0, y=r["display_y"], text=r["icon"], showarrow=False,
             xanchor="center", yanchor="middle", font=dict(size=14),
+            row=1, col=1,
         )
-        events_fig.add_annotation(
+        combined_fig.add_annotation(
             x=0.35, y=r["display_y"],
             text=f"<b>{r['title']}</b>  <span style='font-size:9px;color:#777'>{r['display_date']}</span>",
             showarrow=False, xanchor="left", yanchor="middle", align="left",
             font=dict(size=11, color="#333333"), width=200,
+            row=1, col=1,
         )
-    events_fig.update_xaxes(visible=False, range=[-0.3, 3], fixedrange=True)
-    events_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE, fixedrange=True)
-    events_fig.update_layout(
-        height=CHART_HEIGHT,
-        hovermode="closest",
-        margin=dict(l=0, r=0, t=10, b=10),
-    )
-    event = st.plotly_chart(
-        events_fig,
-        width="stretch",
-        on_select="rerun",
-        selection_mode="points",
-        key="timeline",
-        config={"displayModeBar": False, "scrollZoom": False},
-    )
 
-with leaders_col:
     timeline_entries = [{**leader, "kind": "leader"} for leader in LEADERS]
     timeline_entries += [{**chaos, "kind": "chaos"} for chaos in CHAOS_PERIODS]
 
     BAR_X0, BAR_X1 = 0, 0.15
     LABEL_X = 0.22
-
-    leaders_fig = go.Figure()
 
     for entry in timeline_entries:
         y0, y1 = display_pos(entry["start_year"]), display_pos(entry["end_year"])
@@ -182,18 +180,23 @@ with leaders_col:
 
         if entry["kind"] == "leader":
             color = DYNASTY_COLORS.get(entry["dynasty"], "#999999")
-            leaders_fig.add_shape(type="rect", x0=BAR_X0, x1=BAR_X1, y0=y0, y1=y1, fillcolor=color, line=dict(width=0))
+            combined_fig.add_shape(
+                type="rect", x0=BAR_X0, x1=BAR_X1, y0=y0, y1=y1,
+                fillcolor=color, line=dict(width=0), row=1, col=2,
+            )
             star = "⭐ " if entry["five_good_emperors"] else ""
             label = f"{star}<b>{entry['name']}</b>  <span style='font-size:10px;color:#777'>{fmt_year(entry['start_year'])}–{fmt_year(entry['end_year'])}</span>"
-            leaders_fig.add_annotation(
+            combined_fig.add_annotation(
                 x=LABEL_X, y=y_mid, text=label, showarrow=False,
                 xanchor="left", yanchor="middle", align="left",
                 font=dict(size=12, color="#8a6d00" if entry["five_good_emperors"] else "#333333"),
+                row=1, col=2,
             )
         else:
-            leaders_fig.add_shape(
+            combined_fig.add_shape(
                 type="rect", x0=BAR_X0, x1=BAR_X1, y0=y0, y1=y1,
                 fillcolor="#a63d3d", opacity=0.55, line=dict(width=0),
+                row=1, col=2,
             )
             names_text = "<br>".join(entry["names"])
             label = (
@@ -201,24 +204,33 @@ with leaders_col:
                 f"<span style='font-size:10px;color:#777'>{fmt_year(entry['start_year'])}–{fmt_year(entry['end_year'])}</span>"
                 f"<br><span style='font-size:10px'>{names_text}</span>"
             )
-            leaders_fig.add_annotation(
+            combined_fig.add_annotation(
                 x=LABEL_X, y=y_mid, text=label, showarrow=False,
                 xanchor="left", yanchor="middle", align="left",
                 font=dict(size=11, color="#7a2e2e"),
                 bordercolor="#a63d3d", borderwidth=1, borderpad=5, bgcolor="rgba(166,61,61,0.06)",
+                row=1, col=2,
             )
 
-    leaders_fig.update_xaxes(visible=False, range=[-0.02, 5.3], fixedrange=True)
-    leaders_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE, fixedrange=True)
-    leaders_fig.update_layout(
+    combined_fig.update_xaxes(visible=False, range=[-0.3, 3], fixedrange=True, row=1, col=1)
+    combined_fig.update_xaxes(visible=False, range=[-0.02, 5.3], fixedrange=True, row=1, col=2)
+    combined_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE, fixedrange=True)
+    combined_fig.update_layout(
         height=CHART_HEIGHT,
+        hovermode="closest",
         margin=dict(l=0, r=0, t=10, b=10),
         plot_bgcolor="rgba(0,0,0,0)",
     )
-    st.plotly_chart(
-        leaders_fig, width="stretch", key="leaders",
-        config={"displayModeBar": False, "scrollZoom": False},
-    )
+    with st.container(height=750):
+        event = st.plotly_chart(
+            combined_fig,
+            width="stretch",
+            on_select="rerun",
+            selection_mode="points",
+            key="timeline",
+            config={"displayModeBar": False, "scrollZoom": False},
+        )
+    st.caption("Scroll within the box above to browse the full timeline.")
 
 with detail_col:
     all_selected = event.selection.points if event and event.selection else []
@@ -229,11 +241,10 @@ with detail_col:
     if selected_points:
         row_index = selected_points[0]["customdata"]
         row = df.loc[row_index]
-        icon_col, text_col = st.columns([1, 4])
-        with icon_col:
-            st.markdown(f"<div style='font-size:48px'>{row['icon']}</div>", unsafe_allow_html=True)
-        with text_col:
-            st.subheader(f"{row['title']} — {row['display_date']}")
+        st.markdown(
+            f"<h3>{row['icon']} {row['title']} — {row['display_date']}</h3>",
+            unsafe_allow_html=True,
+        )
         st.write(row["summary"])
         if row.get("leads_to"):
             st.markdown(f"→ *{row['leads_to']}*")
