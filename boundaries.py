@@ -19,18 +19,24 @@ BOUNDARY_YEARS = sorted({f["properties"]["period_year"] for f in _GEOJSON["featu
 
 # The Western Roman Empire had no territory left after this point.
 COLLAPSE_YEAR = 476
-# Rome was too small a city-state to appear in world-scale maps before this.
-EARLIEST_BOUNDARY_YEAR = min(BOUNDARY_YEARS)
+# Beyond this many years from the nearest snapshot, Rome was too small/early
+# for the gap to be a reasonable stand-in (e.g. the 753 BCE founding, 253
+# years before our earliest snapshot) - closer misses (e.g. 509 BCE, 9 years
+# off) still use the nearest snapshot rather than showing nothing.
+MAX_SNAPSHOT_GAP = 150
 
 
 def boundary_for_event(event_year: int):
     """Return (snapshot_year, label, [geometries]) for the nearest available
     boundary snapshot to `event_year`, or None if no territory should be shown.
     """
-    if event_year >= COLLAPSE_YEAR or event_year < EARLIEST_BOUNDARY_YEAR:
+    if event_year >= COLLAPSE_YEAR:
         return None
 
     nearest_year = min(BOUNDARY_YEARS, key=lambda y: abs(y - event_year))
+    if abs(nearest_year - event_year) > MAX_SNAPSHOT_GAP:
+        return None
+
     features = [f for f in _GEOJSON["features"] if f["properties"]["period_year"] == nearest_year]
     label = features[0]["properties"]["label"]
     geometries = [f["geometry"] for f in features]

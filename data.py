@@ -11,8 +11,7 @@ so browsing chronologically reads as a narrative rather than a trivia list.
 # in square kilometers. Ancient territorial figures are inherently fuzzy and
 # historians disagree on exact numbers - these are illustrative estimates
 # based on commonly cited figures, not precise measurements. Extent is tracked
-# for the (Western) Roman state itself and drops to 0 after its 476 CE collapse,
-# even though later "Rome" events on the timeline are about its cultural legacy.
+# for the (Western) Roman state itself and drops to 0 after its 476 CE collapse.
 TERRITORY = [
     {"year": -753, "km2": 2, "note": "Founding: just the city itself"},
     {"year": -500, "km2": 5_000, "note": "Early Republic controls Latium"},
@@ -25,9 +24,111 @@ TERRITORY = [
     {"year": 117, "km2": 5_000_000, "note": "Trajan - the empire's greatest extent"},
     {"year": 200, "km2": 4_400_000, "note": "Severan era - still vast, but plateauing"},
     {"year": 284, "km2": 3_600_000, "note": "Diocletian ends the Crisis of the Third Century"},
-    {"year": 395, "km2": 4_000_000, "note": "Empire splits permanently into East and West"},
+    {"year": 378, "km2": 3_000_000, "note": "Rome's legions are shattered at Adrianople"},
+    {"year": 395, "km2": 2_700_000, "note": "Empire splits permanently into East and West"},
+    {"year": 410, "km2": 2_000_000, "note": "Alaric sacks Rome; Britain is abandoned"},
+    {"year": 452, "km2": 900_000, "note": "Vandals and Visigoths hold North Africa, Spain, and Gaul"},
     {"year": 476, "km2": 0, "note": "The Western Roman Empire collapses"},
-    {"year": 1190, "km2": 0, "note": "The empire is gone - but its sayings live on"},
+]
+
+# Color per dynasty/era, used by the vertical "Leaders Over Time" chart.
+DYNASTY_COLORS = {
+    "Roman Kingdom": "#9a9a9a",
+    "Roman Republic": "#b7b0a3",
+    "Late Republic": "#8c8c8c",
+    "Julio-Claudian": "#c17b7b",
+    "Flavian": "#5c7f97",
+    "Nerva-Antonine": "#d99a3f",
+    "Severan": "#9d94c4",
+    "Crisis Emperors": "#a63d3d",
+    "Tetrarchy": "#1f5c5c",
+    "Constantinian": "#2e8b8b",
+    "Valentinian": "#7fbfbf",
+    "Theodosian": "#c2a05a",
+}
+
+# Individual rulers of Rome, kings through the last Western emperor. Reign
+# years are simplified for readability - some co-rulers are merged into a
+# single entry, and short transitional years are rounded to keep the
+# sequence gapless outside of the chaotic multi-claimant CHAOS_PERIODS.
+LEADERS = [
+    {"name": "The Seven Kings", "start_year": -753, "end_year": -509, "dynasty": "Roman Kingdom", "five_good_emperors": False},
+    {"name": "The Republic (Consuls)", "start_year": -509, "end_year": -49, "dynasty": "Roman Republic", "five_good_emperors": False},
+    {"name": "Julius Caesar", "start_year": -49, "end_year": -44, "dynasty": "Late Republic", "five_good_emperors": False},
+    {"name": "Augustus", "start_year": -27, "end_year": 14, "dynasty": "Julio-Claudian", "five_good_emperors": False},
+    {"name": "Tiberius", "start_year": 14, "end_year": 37, "dynasty": "Julio-Claudian", "five_good_emperors": False},
+    {"name": "Caligula", "start_year": 37, "end_year": 41, "dynasty": "Julio-Claudian", "five_good_emperors": False},
+    {"name": "Claudius", "start_year": 41, "end_year": 54, "dynasty": "Julio-Claudian", "five_good_emperors": False},
+    {"name": "Nero", "start_year": 54, "end_year": 68, "dynasty": "Julio-Claudian", "five_good_emperors": False},
+    {"name": "Vespasian", "start_year": 69, "end_year": 79, "dynasty": "Flavian", "five_good_emperors": False},
+    {"name": "Titus", "start_year": 79, "end_year": 81, "dynasty": "Flavian", "five_good_emperors": False},
+    {"name": "Domitian", "start_year": 81, "end_year": 96, "dynasty": "Flavian", "five_good_emperors": False},
+    {"name": "Nerva", "start_year": 96, "end_year": 98, "dynasty": "Nerva-Antonine", "five_good_emperors": True},
+    {"name": "Trajan", "start_year": 98, "end_year": 117, "dynasty": "Nerva-Antonine", "five_good_emperors": True},
+    {"name": "Hadrian", "start_year": 117, "end_year": 138, "dynasty": "Nerva-Antonine", "five_good_emperors": True},
+    {"name": "Antoninus Pius", "start_year": 138, "end_year": 161, "dynasty": "Nerva-Antonine", "five_good_emperors": True},
+    {"name": "Marcus Aurelius", "start_year": 161, "end_year": 180, "dynasty": "Nerva-Antonine", "five_good_emperors": True},
+    {"name": "Commodus", "start_year": 180, "end_year": 192, "dynasty": "Nerva-Antonine", "five_good_emperors": False},
+    {"name": "Septimius Severus", "start_year": 193, "end_year": 211, "dynasty": "Severan", "five_good_emperors": False},
+    {"name": "Caracalla", "start_year": 211, "end_year": 217, "dynasty": "Severan", "five_good_emperors": False},
+    {"name": "Macrinus", "start_year": 217, "end_year": 218, "dynasty": "Severan", "five_good_emperors": False},
+    {"name": "Elagabalus", "start_year": 218, "end_year": 222, "dynasty": "Severan", "five_good_emperors": False},
+    {"name": "Severus Alexander", "start_year": 222, "end_year": 235, "dynasty": "Severan", "five_good_emperors": False},
+    {"name": "Aurelian", "start_year": 270, "end_year": 275, "dynasty": "Crisis Emperors", "five_good_emperors": False},
+    {"name": "Probus", "start_year": 275, "end_year": 282, "dynasty": "Crisis Emperors", "five_good_emperors": False},
+    {"name": "Carus, Carinus & Numerian", "start_year": 282, "end_year": 284, "dynasty": "Crisis Emperors", "five_good_emperors": False},
+    {"name": "Diocletian & Maximian", "start_year": 284, "end_year": 305, "dynasty": "Tetrarchy", "five_good_emperors": False},
+    {"name": "Constantine the Great", "start_year": 305, "end_year": 337, "dynasty": "Constantinian", "five_good_emperors": False},
+    {"name": "Constantine's Sons", "start_year": 337, "end_year": 361, "dynasty": "Constantinian", "five_good_emperors": False},
+    {"name": "Julian the Apostate", "start_year": 361, "end_year": 363, "dynasty": "Constantinian", "five_good_emperors": False},
+    {"name": "Jovian", "start_year": 363, "end_year": 364, "dynasty": "Constantinian", "five_good_emperors": False},
+    {"name": "Valentinian I", "start_year": 364, "end_year": 375, "dynasty": "Valentinian", "five_good_emperors": False},
+    {"name": "Gratian & Valentinian II", "start_year": 375, "end_year": 392, "dynasty": "Valentinian", "five_good_emperors": False},
+    {"name": "Theodosius the Great", "start_year": 392, "end_year": 395, "dynasty": "Theodosian", "five_good_emperors": False},
+    {"name": "Honorius", "start_year": 395, "end_year": 423, "dynasty": "Theodosian", "five_good_emperors": False},
+    {"name": "Valentinian III", "start_year": 423, "end_year": 455, "dynasty": "Theodosian", "five_good_emperors": False},
+]
+
+# Chaotic multi-claimant periods, shown as callout boxes listing every name
+# rather than individual bar segments.
+CHAOS_PERIODS = [
+    {
+        "start_year": -44,
+        "end_year": -27,
+        "label": "Civil War",
+        "names": ["Mark Antony", "Lepidus", "Octavian"],
+    },
+    {
+        "start_year": 68,
+        "end_year": 69,
+        "label": "Year of the Four Emperors",
+        "names": ["Galba", "Otho", "Vitellius", "Vespasian"],
+    },
+    {
+        "start_year": 192,
+        "end_year": 193,
+        "label": "Year of the Five Emperors",
+        "names": ["Pertinax", "Didius Julianus", "Pescennius Niger", "Clodius Albinus", "Septimius Severus"],
+    },
+    {
+        "start_year": 235,
+        "end_year": 270,
+        "label": "The Military Emperors",
+        "names": [
+            "Maximinus Thrax", "Gordian I & II", "Pupienus & Balbinus", "Gordian III",
+            "Philip the Arab", "Decius", "Trebonianus Gallus", "Aemilian",
+            "Valerian", "Gallienus", "Claudius Gothicus",
+        ],
+    },
+    {
+        "start_year": 455,
+        "end_year": 476,
+        "label": "The Final Western Emperors",
+        "names": [
+            "Avitus", "Majorian", "Libius Severus", "Anthemius",
+            "Olybrius", "Glycerius", "Julius Nepos", "Romulus Augustulus",
+        ],
+    },
 ]
 
 EVENTS = [
@@ -39,7 +140,16 @@ EVENTS = [
         "category": "Rome",
         "icon": "🐺",
         "summary": "Legendary founding of the city by Romulus, who allegedly kills his twin brother Remus in a dispute over where to build.",
-        "leads_to": "Centuries of expansion later, Rome's growing power draws the attention of its greatest rival: Carthage.",
+        "leads_to": "For over two centuries, Rome is ruled by kings - until one of them goes too far.",
+    },
+    {
+        "title": "Founding of the Roman Republic",
+        "year": -509,
+        "display_date": "509 BCE",
+        "category": "Rome",
+        "icon": "⚖️",
+        "summary": "Furious over the rape of Lucretia, Roman nobles led by Lucius Junius Brutus overthrow King Tarquin the Proud and abolish the monarchy - replacing one king with two annually elected consuls who check each other's power.",
+        "leads_to": "For nearly three centuries, Rome expands under this republican system, conquering the Italian peninsula - until a war with Carthage tests it like nothing before.",
     },
     {
         "title": "Hannibal Crosses the Alps",
@@ -192,7 +302,16 @@ EVENTS = [
         "category": "Rome",
         "icon": "🔥",
         "summary": "A massive fire destroys much of Rome while Nero, according to legend, fiddles as the city burns. He blames - and brutally persecutes - the city's Christians, cementing his reputation as history's archetypal tyrant.",
-        "leads_to": "Rome's stability returns under the more disciplined Flavian emperors - just in time for disaster to strike a city south of Rome.",
+        "leads_to": "Nero's suicide leaves no clear heir - and Rome's leadership promptly collapses into chaos.",
+    },
+    {
+        "title": "The Year of the Four Emperors",
+        "year": 69,
+        "display_date": "69 CE",
+        "category": "Rome",
+        "icon": "🔄",
+        "summary": "Nero's death without an heir plunges Rome into chaos: four different men - Galba, Otho, Vitellius, and finally Vespasian - claim the throne within a single year, each backed by a different army.",
+        "leads_to": "Vespasian's victory ends the chaos and founds a new dynasty - just in time for disaster to strike a city south of Rome.",
     },
     {
         "title": "Vesuvius Erupts, Pompeii Buried",
@@ -210,7 +329,16 @@ EVENTS = [
         "category": "Rome",
         "icon": "🏟️",
         "summary": "The Flavian Amphitheatre opens with 100 days of games, hosting gladiatorial combat for the next several centuries.",
-        "leads_to": "Free games at the Colosseum become exhibit A for a satirist's complaint about how Rome keeps its public pacified.",
+        "leads_to": "Within two decades, Rome stumbles onto its most stable system yet for choosing a leader: pick the best man, not just the closest relative.",
+    },
+    {
+        "title": "Nerva Adopts Trajan",
+        "year": 97,
+        "display_date": "97 CE",
+        "category": "Rome",
+        "icon": "🤝",
+        "summary": "To avoid another succession crisis, the elderly Emperor Nerva adopts a capable general, Trajan, as his heir instead of relying on bloodline. Choosing the best successor rather than the closest relative ushers in the \"Five Good Emperors,\" Rome's most stable stretch.",
+        "leads_to": "That same stability gives satirists room to complain about softer problems - like how Rome keeps its public pacified with free food and games.",
     },
     {
         "title": "\"Bread and Circuses\"",
@@ -228,7 +356,25 @@ EVENTS = [
         "category": "Rome",
         "icon": "🧘",
         "summary": "While commanding troops on the frontier, Emperor Marcus Aurelius privately writes Meditations - Stoic reflections that make him history's model of the philosopher-king.",
-        "leads_to": "The stability of Aurelius's rule doesn't last - within decades Rome slides into a century of crisis, until an emperor claims a battlefield vision that changes everything.",
+        "leads_to": "The stability of Aurelius's rule doesn't last - within decades, plague and civil war send the empire into a downward spiral of leaders installed and murdered by their own troops.",
+    },
+    {
+        "title": "The Year of the Six Emperors",
+        "year": 238,
+        "display_date": "238 CE",
+        "category": "Rome",
+        "icon": "💥",
+        "summary": "In a single chaotic year, six different men hold or claim imperial power as the Crisis of the Third Century spirals - a preview of the fifty years of civil war, plague, and \"barracks emperors\" installed and murdered by their own troops that follow.",
+        "leads_to": "The chaos finally burns itself out under an emperor willing to try something radical: splitting the job itself.",
+    },
+    {
+        "title": "Diocletian Splits the Empire in Four",
+        "year": 284,
+        "display_date": "284 CE",
+        "category": "Rome",
+        "icon": "👥",
+        "summary": "After a half-century of chaos known as the Crisis of the Third Century, Emperor Diocletian ends it by splitting imperial rule among four co-emperors - the Tetrarchy. It stabilizes Rome, but sets a precedent for permanent division.",
+        "leads_to": "Diocletian's fix buys the empire another generation - and one of those four rulers is about to have a vision that changes everything.",
     },
     {
         "title": "Constantine's Vision at the Milvian Bridge",
@@ -246,7 +392,16 @@ EVENTS = [
         "category": "Rome",
         "icon": "✝️",
         "summary": "Emperor Constantine legalizes Christianity throughout the Roman Empire, ending centuries of persecution.",
-        "leads_to": "Christianity's new legitimacy sets off centuries of debate over how the faith should actually be practiced - starting with something as small as which day to fast.",
+        "leads_to": "But legalizing Christianity doesn't solve Rome's deeper problem: the empire's borders are buckling under pressure that's been building for a century.",
+    },
+    {
+        "title": "Battle of Adrianople",
+        "year": 378,
+        "display_date": "378 CE",
+        "category": "Rome",
+        "icon": "🏇",
+        "summary": "A Roman army is annihilated by Gothic cavalry, and Emperor Valens is killed in battle - the worst Roman defeat in centuries, and a turning point historians often mark as the beginning of the end.",
+        "leads_to": "Even reeling from military disaster, the empire's religious life carries on - within a decade, a bishop in Milan is fielding much smaller questions, like when to fast.",
     },
     {
         "title": "\"When in Rome...\"",
@@ -255,16 +410,33 @@ EVENTS = [
         "category": "Rome",
         "icon": "🤷",
         "summary": "Augustine asks Bishop Ambrose of Milan why Rome fasts on Saturdays but Milan doesn't. Ambrose's reply is later paraphrased into \"when in Rome, do as the Romans do.\"",
-        "leads_to": "Long after the empire falls, medieval Europe is still coining proverbs about the city that once ruled it all.",
+        "leads_to": "Two decades later, the city that hasn't fallen to a foreign enemy in almost 800 years finally does.",
     },
     {
-        "title": "\"Rome Wasn't Built in a Day\"",
-        "year": 1190,
-        "display_date": "c. 1190 CE",
+        "title": "Alaric Sacks Rome",
+        "year": 410,
+        "display_date": "410 CE",
         "category": "Rome",
-        "icon": "🧱",
-        "summary": "The proverb first appears in a medieval French collection - \"Rome ne fu pas faite toute en un jour\" - capturing how the city, and the empire, actually grew gradually over centuries.",
-        "leads_to": "Centuries after it fell, the empire's rise and fall is still the reference point the world reaches for when talking about power, decline, and everything in between.",
+        "icon": "🔥",
+        "summary": "Visigothic king Alaric and his army sack the city of Rome itself - the first time it's fallen to a foreign enemy in almost 800 years. The shock is so profound that Augustine writes The City of God partly in response.",
+        "leads_to": "Rome survives as a symbol even as the empire keeps shrinking around it - until an even more feared invader reaches the gates of Italy.",
     },
-
+    {
+        "title": "Attila the Hun Reaches Italy",
+        "year": 452,
+        "display_date": "452 CE",
+        "category": "Rome",
+        "icon": "⚡",
+        "summary": "Attila the Hun, the \"Scourge of God,\" invades Italy itself. Legend holds that Pope Leo I personally meets Attila and talks him into turning back before he reaches Rome.",
+        "leads_to": "Attila retreats, but the empire he spared is now a shadow of itself - reduced to Italy and a few scattered provinces.",
+    },
+    {
+        "title": "Fall of the Western Roman Empire",
+        "year": 476,
+        "display_date": "476 CE",
+        "category": "Rome",
+        "icon": "📉",
+        "summary": "Germanic general Odoacer deposes the last Western Roman emperor, Romulus Augustulus - a teenager - and doesn't bother naming a replacement. After five centuries as an empire, Rome's western half simply ceases to exist.",
+        "leads_to": "Its legions and emperors are gone, but Rome's laws, language, architecture, and legends go on to shape the world for the next 1,500 years and beyond.",
+    },
 ]
