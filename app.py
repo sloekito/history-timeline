@@ -151,8 +151,8 @@ with events_col:
             showarrow=False, xanchor="left", yanchor="middle", align="left",
             font=dict(size=11, color="#333333"), width=200,
         )
-    events_fig.update_xaxes(visible=False, range=[-0.3, 3])
-    events_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE)
+    events_fig.update_xaxes(visible=False, range=[-0.3, 3], fixedrange=True)
+    events_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE, fixedrange=True)
     events_fig.update_layout(
         height=CHART_HEIGHT,
         hovermode="closest",
@@ -164,6 +164,7 @@ with events_col:
         on_select="rerun",
         selection_mode="points",
         key="timeline",
+        config={"displayModeBar": False, "scrollZoom": False},
     )
 
 with leaders_col:
@@ -207,14 +208,17 @@ with leaders_col:
                 bordercolor="#a63d3d", borderwidth=1, borderpad=5, bgcolor="rgba(166,61,61,0.06)",
             )
 
-    leaders_fig.update_xaxes(visible=False, range=[-0.02, 5.3])
-    leaders_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE)
+    leaders_fig.update_xaxes(visible=False, range=[-0.02, 5.3], fixedrange=True)
+    leaders_fig.update_yaxes(visible=False, range=SHARED_Y_RANGE, fixedrange=True)
     leaders_fig.update_layout(
         height=CHART_HEIGHT,
         margin=dict(l=0, r=0, t=10, b=10),
         plot_bgcolor="rgba(0,0,0,0)",
     )
-    st.plotly_chart(leaders_fig, width="stretch", key="leaders")
+    st.plotly_chart(
+        leaders_fig, width="stretch", key="leaders",
+        config={"displayModeBar": False, "scrollZoom": False},
+    )
 
 with detail_col:
     all_selected = event.selection.points if event and event.selection else []
